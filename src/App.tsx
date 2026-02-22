@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react'
 import './App.css'
 
 const SEARCH_TERMS = [
-  'funny cat', 'dancing dog', 'sunset', 'ocean waves', 'happy birthday',
-  'fireworks', 'rainbow', 'pizza', 'astronaut', 'penguin',
-  'roller coaster', 'puppy', 'waterfall', 'northern lights', 'butterfly',
-  'coffee', 'skateboard trick', 'baby laughing', 'thunderstorm', 'coral reef',
-  'hot air balloon', 'snowfall', 'kitten playing', 'volcano', 'surfing',
-  'bumblebee', 'shooting star', 'pancakes', 'hummingbird', 'aurora borealis',
+  'weird dancing', 'cursed image', 'unexpected animal', 'chaotic energy',
+  'fever dream', 'awkward moment', 'unhinged behavior', 'bizarre food',
+  'creepy doll', 'confused cat', 'dramatic chipmunk', 'weird flex',
+  'cursed cat', 'frog scream', 'existential dread', 'goblin mode',
+  'maniacal laugh', 'weird bird', 'sus moment', 'nightmare fuel',
+  'eldritch horror', 'menacing aura', 'deranged energy', 'feral behavior',
+  'uncanny valley', 'chaos goblin', 'psycho stare', 'weird puppet',
+  'disturbing smile', 'haunted vibes',
 ]
 
 const GIPHY_API_KEY = '0UnHCD5HB5Jr3hw9Ws1Eezh4Kf9CDCHu'
