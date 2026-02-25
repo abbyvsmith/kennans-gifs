@@ -21,7 +21,9 @@ interface CachedGif {
 }
 
 function getTodayKey(): string {
-  return new Date().toISOString().split('T')[0]
+  const now = new Date()
+  const mst = new Date(now.toLocaleString('en-US', { timeZone: 'America/Denver' }))
+  return `${mst.getFullYear()}-${String(mst.getMonth() + 1).padStart(2, '0')}-${String(mst.getDate()).padStart(2, '0')}`
 }
 
 function getSearchTerm(dateStr: string): string {
