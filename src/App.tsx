@@ -3,9 +3,9 @@ import './App.css'
 
 const SEARCH_TERMS = [
   // weird & bizarre
-  'weird dancing', 'weird flex', 'weird bird', 'weird puppet', 'weird food',
+  'weird dancing', 'weird flex', 'weird bird', 'weird puppet', 'cursed snack',
   'bizarre animal', 'bizarre talent', 'bizarre invention', 'strange creature',
-  'oddly satisfying fail', 'weird commercial', 'weird mascot', 'weird sport',
+  'oddly threatening', 'weird commercial', 'weird mascot', 'weird sport',
   // cursed & creepy
   'cursed image', 'cursed cat', 'creepy doll', 'uncanny valley', 'cursed video',
   'cursed food', 'haunted vibes', 'nightmare fuel', 'disturbing smile',
@@ -14,17 +14,17 @@ const SEARCH_TERMS = [
   'chaotic energy', 'chaos goblin', 'deranged energy', 'feral behavior',
   'unhinged behavior', 'goblin mode', 'gremlin energy', 'feral cat energy',
   'pure chaos', 'absolute mayhem', 'everything is fine fire', 'controlled chaos',
-  // animals being weird
+  // animals being unhinged
   'unexpected animal', 'confused cat', 'dramatic chipmunk', 'screaming goat',
   'angry raccoon', 'derpy dog', 'startled cat', 'judgmental bird',
   'chaotic parrot', 'suspicious hamster', 'frog scream', 'cat zoomies',
   'dog tantrum', 'angry possum', 'evil goose',
   // unhinged reactions
-  'fever dream', 'awkward moment', 'existential dread', 'sus moment',
+  'fever dream', 'unhinged reaction', 'existential dread', 'sus moment',
   'psycho stare', 'maniacal laugh', 'menacing aura', 'villain laugh',
   'evil grin', 'slow descent into madness', 'thousand yard stare',
-  'awkward silence', 'visible confusion', 'internal screaming',
-  'this is fine', 'stressed out', 'losing it',
+  'deranged laughter', 'visible confusion', 'internal screaming',
+  'this is fine', 'losing my mind', 'losing it',
   // chaotic internet culture
   'shitpost energy', 'deep fried meme', 'glitch art', 'earrape face',
   'speed wobble', 'windows error', 'buffering reality', 'lag in real life',
@@ -33,7 +33,7 @@ const SEARCH_TERMS = [
   // unhinged physical comedy
   'spectacular fail', 'unexpected explosion', 'surprise scare reaction',
   'ragdoll physics', 'cartoon logic irl', 'slapstick chaos',
-  'bowling strike fail', 'trampoline fail', 'inflatable chaos',
+  'chaotic destruction', 'wipeout fail', 'inflatable chaos',
   // eldritch & surreal
   'eldritch horror', 'cosmic horror reaction', 'void stare',
   'reality glitch', 'interdimensional', 'surreal meme',
@@ -79,27 +79,7 @@ function App() {
   const [gif, setGif] = useState<CachedGif | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [copied, setCopied] = useState(false)
-
-  async function copyGif() {
-    if (!gif) return
-    try {
-      const res = await fetch(gif.url)
-      const blob = await res.blob()
-      await navigator.clipboard.write([
-        new ClipboardItem({ [blob.type]: blob }),
-      ])
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch {
-      // Fallback: copy the URL as text
-      await navigator.clipboard.writeText(gif.url)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    }
-  }
-
-  useEffect(() => {
+useEffect(() => {
     const today = getTodayKey()
 
     const cached = localStorage.getItem('gif-of-the-day')
@@ -142,18 +122,6 @@ function App() {
       {gif && (
         <div className="gif-container">
           <img src={gif.url} alt={gif.title} />
-          <button className="copy-btn" onClick={copyGif} title={copied ? 'Copied!' : 'Copy GIF'}>
-            {copied ? (
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-              </svg>
-            )}
-          </button>
         </div>
       )}
     </div>
