@@ -2,14 +2,42 @@ import { useEffect, useState } from 'react'
 import './App.css'
 
 const SEARCH_TERMS = [
-  'weird dancing', 'cursed image', 'unexpected animal', 'chaotic energy',
-  'fever dream', 'awkward moment', 'unhinged behavior', 'bizarre food',
-  'creepy doll', 'confused cat', 'dramatic chipmunk', 'weird flex',
-  'cursed cat', 'frog scream', 'existential dread', 'goblin mode',
-  'maniacal laugh', 'weird bird', 'sus moment', 'nightmare fuel',
-  'eldritch horror', 'menacing aura', 'deranged energy', 'feral behavior',
-  'uncanny valley', 'chaos goblin', 'psycho stare', 'weird puppet',
-  'disturbing smile', 'haunted vibes',
+  // weird & bizarre
+  'weird dancing', 'weird flex', 'weird bird', 'weird puppet', 'weird food',
+  'bizarre animal', 'bizarre talent', 'bizarre invention', 'strange creature',
+  'oddly satisfying fail', 'weird commercial', 'weird mascot', 'weird sport',
+  // cursed & creepy
+  'cursed image', 'cursed cat', 'creepy doll', 'uncanny valley', 'cursed video',
+  'cursed food', 'haunted vibes', 'nightmare fuel', 'disturbing smile',
+  'sleep paralysis demon', 'backrooms', 'liminal space', 'creepy smile',
+  // chaotic energy
+  'chaotic energy', 'chaos goblin', 'deranged energy', 'feral behavior',
+  'unhinged behavior', 'goblin mode', 'gremlin energy', 'feral cat energy',
+  'pure chaos', 'absolute mayhem', 'everything is fine fire', 'controlled chaos',
+  // animals being weird
+  'unexpected animal', 'confused cat', 'dramatic chipmunk', 'screaming goat',
+  'angry raccoon', 'derpy dog', 'startled cat', 'judgmental bird',
+  'chaotic parrot', 'suspicious hamster', 'frog scream', 'cat zoomies',
+  'dog tantrum', 'angry possum', 'evil goose',
+  // unhinged reactions
+  'fever dream', 'awkward moment', 'existential dread', 'sus moment',
+  'psycho stare', 'maniacal laugh', 'menacing aura', 'villain laugh',
+  'evil grin', 'slow descent into madness', 'thousand yard stare',
+  'awkward silence', 'visible confusion', 'internal screaming',
+  'this is fine', 'stressed out', 'losing it',
+  // chaotic internet culture
+  'shitpost energy', 'deep fried meme', 'glitch art', 'earrape face',
+  'speed wobble', 'windows error', 'buffering reality', 'lag in real life',
+  'npc behavior', 'main character energy', 'plot twist moment',
+  'side quest energy', 'boss music starts', 'ominous floating',
+  // unhinged physical comedy
+  'spectacular fail', 'unexpected explosion', 'surprise scare reaction',
+  'ragdoll physics', 'cartoon logic irl', 'slapstick chaos',
+  'bowling strike fail', 'trampoline fail', 'inflatable chaos',
+  // eldritch & surreal
+  'eldritch horror', 'cosmic horror reaction', 'void stare',
+  'reality glitch', 'interdimensional', 'surreal meme',
+  'abstract nightmare', 'fever dream logic', 'time loop',
 ]
 
 const GIPHY_API_KEY = '0UnHCD5HB5Jr3hw9Ws1Eezh4Kf9CDCHu'
@@ -26,10 +54,25 @@ function getTodayKey(): string {
   return `${mst.getFullYear()}-${String(mst.getMonth() + 1).padStart(2, '0')}-${String(mst.getDate()).padStart(2, '0')}`
 }
 
-function getSearchTerm(dateStr: string): string {
+function hashDate(dateStr: string): number {
+  // Simple but effective hash to spread dates across a large range
   const [year, month, day] = dateStr.split('-').map(Number)
-  const index = (year * 366 + month * 31 + day) % SEARCH_TERMS.length
-  return SEARCH_TERMS[index]
+  let h = year * 374761 + month * 51329 + day * 2971
+  h = ((h >>> 0) ^ (h << 13)) >>> 0
+  h = (h * 2654435761) >>> 0
+  return h
+}
+
+function getSearchTerm(dateStr: string): string {
+  const h = hashDate(dateStr)
+  return SEARCH_TERMS[h % SEARCH_TERMS.length]
+}
+
+function getGiphyOffset(dateStr: string): number {
+  // Use a different part of the hash to pick an offset (0-49)
+  // so even repeated search terms return different GIFs
+  const h = hashDate(dateStr)
+  return Math.floor(h / SEARCH_TERMS.length) % 50
 }
 
 function App() {
@@ -70,8 +113,9 @@ function App() {
     }
 
     const term = getSearchTerm(today)
+    const offset = getGiphyOffset(today)
     fetch(
-      `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${encodeURIComponent(term)}&limit=1&rating=g`
+      `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${encodeURIComponent(term)}&limit=1&offset=${offset}&rating=g`
     )
       .then((res) => res.json())
       .then((data) => {
